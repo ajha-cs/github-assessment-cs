@@ -54,5 +54,5 @@ jobs:
           echo "Found package identifier: $IDENTIFIER"
           
           # Promote package using the identifier
-          cloudsmith mv --yes --verbose interview-aayush-jha/staging/$IDENTIFIER production
+          cloudsmith mv --yes --verbose interview-aayush-jha/staging/kJ6HP8CMFQ1U production
         shell: bash
