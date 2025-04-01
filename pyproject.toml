@@ -15,4 +15,9 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
-] 
+]
+[tool.hatch.build]
+include = ["src/example_package/**/*"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/example_package"]
