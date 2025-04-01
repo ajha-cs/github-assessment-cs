@@ -37,14 +37,11 @@ jobs:
           run-id: ${{ github.event.workflow_run.id }}  
 
       - name: Get OIDC token
-        id: get_token
         run: |
           value=$(curl -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=api://AzureADTokenExchange" | jq '.value')
-          echo $value
-          token=$(curl -X POST -H "Content-Type: application/json" -d "{\"oidc_token\":$value, \"\":\"ekservice\"}" https://api.cloudsmith.io/openid/interview-aayush-jha/ | jq -r '.token')
-          echo $token
+          token=$(curl -X POST -H "Content-Type: application/json" -d "{\"oidc_token\":$value, \"service_slug\":\"ekservice\"}" https://api.cloudsmith.io/openid/interview-aayush-jha/ | jq -r '.token')
           curl --request GET --url https://api.cloudsmith.io/v1/user/self/ --header "X-Api-Key:Bearer $token" --header 'accept: application/json'
-
+                    
           echo "CLOUDSMITH_API_KEY=$token" >> $GITHUB_ENV
 
       - name: Cloudsmith CLI Setup
