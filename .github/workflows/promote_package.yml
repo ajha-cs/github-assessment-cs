@@ -21,6 +21,7 @@ env:
 
 permissions:
   id-token: write
+  contents: read
 
 jobs:
   promote:
@@ -30,34 +31,40 @@ jobs:
       - name: Install Cloudsmith CLI
         uses: cloudsmith-io/cloudsmith-cli-action@v1.0.3
         with:
-          api-key: ${{ env.CLOUDSMITH_API_KEY }}
           oidc-namespace: ${{ env.CLOUDSMITH_NAMESPACE }}
           oidc-service-slug: ${{ env.CLOUDSMITH_SERVICE_SLUG }}
 
       - name: Checking the user details
         run: |
-          cloudsmith whoami      
+          cloudsmith whoami 
+      
+      - name: Tag package as ready-for-production
+        run: |
+          echo "Tagging ${{ env.PACKAGE_NAME }} v${{ github.event.client_payload.package_version }}"
+          cloudsmith tag create \
+            "${{ env.CLOUDSMITH_NAMESPACE }}/${{ env.CLOUDSMITH_STAGING_REPO }}" \
+            "${{ github.event.client_payload.package_identifier }}" \
+            "ready-for-production"
 
       - name: Get package identifier and promote
         run: |
           # Query for the package and get its identifier
-          PACKAGE_QUERY="filename:${{ env.PACKAGE_NAME }}-${{ github.event.inputs.package_version }}.tar.gz"
+          PACKAGE_QUERY="tag:ready-for-production"
           echo "Searching for package with query: $PACKAGE_QUERY"
           
           PACKAGE_DATA=$(cloudsmith list packages ${{ vars.CLOUDSMITH_NAMESPACE }}/${{ env.CLOUDSMITH_STAGING_REPO }} -q "$PACKAGE_QUERY" -F json)
           echo "$PACKAGE_DATA"
 
-          # Extract the identifier_perm using jq
-          IDENTIFIER=$(echo "$PACKAGE_DATA" | jq -r '.data[0].identifier_perm')
-          
-          if [ -z "$IDENTIFIER" ] || [ "$IDENTIFIER" = "null" ]; then
-            echo "Failed to find package identifier"
-            exit 1
+          PACKAGE_COUNT=$(echo "$PACKAGE_DATA" | jq '.data | length')
+          if [ "$PACKAGE_COUNT" -eq 0 ]; then
+            echo "No packages found with tag 'ready-for-production'"
+            exit 0
           fi
-          
-          echo "Found package identifier: $IDENTIFIER"
-          
-          # Promote package using the identifier yeah
-          echo "$IDENTIFIER"
-          cloudsmith mv --yes --verbose ${{ vars.CLOUDSMITH_NAMESPACE }}/${{ env.CLOUDSMITH_STAGING_REPO }}/$IDENTIFIER ${{ env.CLOUDSMITH_PRODUCTION_REPO }}
+
+          echo "$PACKAGE_DATA" | jq -r '.data[] | .identifier_perm' | while read -r IDENTIFIER; do
+            echo "Found package identifier: $IDENTIFIER"
+            cloudsmith mv --yes --verbose \
+              "${{ env.CLOUDSMITH_NAMESPACE }}/${{ env.CLOUDSMITH_STAGING_REPO }}/$IDENTIFIER" \
+              "${{ env.CLOUDSMITH_PRODUCTION_REPO }}"
+          done
         shell: bash
