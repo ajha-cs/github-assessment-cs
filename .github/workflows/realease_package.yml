@@ -50,7 +50,7 @@ jobs:
           oidc-namespace: "$CLOUDSMITH_NAMESPACE"
           oidc-service-slug: "$CLOUDSMITH_SERVICE_SLUG"
 
-      - name: Checking the user details
+      - name: Checking the user details yeah
         run: |
           cloudsmith whoami    
 
