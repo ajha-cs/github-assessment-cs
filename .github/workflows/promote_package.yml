@@ -29,6 +29,10 @@ jobs:
           oidc-namespace: ${{ env.CLOUDSMITH_NAMESPACE }}
           oidc-service-slug: ${{ env.CLOUDSMITH_SERVICE_SLUG }}
 
+      - name: Checking the user details yeah
+        run: |
+          cloudsmith whoami      
+
       - name: Get package identifier and promote
         run: |
           # Query for the package and get its identifier
