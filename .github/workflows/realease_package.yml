@@ -26,7 +26,7 @@ jobs:
       CS_API_KEY: ${{ steps.get_token.outputs.CS_API_KEY }}  
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout Repository yeah
         uses: actions/checkout@v4
 
       - name: Get OIDC token
