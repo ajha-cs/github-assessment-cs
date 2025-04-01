@@ -43,7 +43,7 @@ jobs:
           echo "Tagging ${{ env.PACKAGE_NAME }} v${{ github.event.client_payload.package_version }}"
           cloudsmith tags add \
             "${{ env.CLOUDSMITH_NAMESPACE }}/${{ env.CLOUDSMITH_STAGING_REPO }}" \
-            "${{ github.event.client_payload.package_identifier }}" \
+            "${{ github.event.client_payload.package_name }}" \
             "ready-for-production"
 
       - name: Get package identifier and promote
