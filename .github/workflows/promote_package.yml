@@ -30,7 +30,7 @@ jobs:
           oidc-namespace: ${{ env.CLOUDSMITH_NAMESPACE }}
           oidc-service-slug: ${{ env.CLOUDSMITH_SERVICE_SLUG }}
 
-      - name: Checking the user details yeah
+      - name: Checking the user details
         run: |
           cloudsmith whoami      
 
