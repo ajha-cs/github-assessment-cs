@@ -27,12 +27,21 @@ jobs:
       - name: Checkout Repository!
         uses: actions/checkout@v4
 
+      - name: Download artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: python-package
+        path: dist
+        repository: ${{ github.repository }}
+        github-token: ${{ github.token }}
+        run-id: ${{ github.event.workflow_run.id }}  
+
       - name: Get OIDC token
         id: get_token
         run: |
           value=$(curl -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=api://AzureADTokenExchange" | jq '.value')
           echo $value
-          token=$(curl -X POST -H "Content-Type: application/json" -d "{\"oidc_token\":$value, \"service_slug\":\"${{ vars.CLOUDSMITH_SERVICE_SLUG }}\"}" https://api.cloudsmith.io/openid/${{ vars.CLOUDSMITH_NAMESPACE }}/ | jq -r '.token')
+          token=$(curl -X POST -H "Content-Type: application/json" -d "{\"oidc_token\":$value, \"\":\"nyiservice-0hjh\"}" https://api.cloudsmith.io/openid/interview-aayush-jha/ | jq -r '.token')
           echo $token
           curl --request GET --url https://api.cloudsmith.io/v1/user/self/ --header "X-Api-Key:Bearer $token" --header 'accept: application/json'
 
@@ -47,15 +56,6 @@ jobs:
       - name: Checking the user details
         run: |
           cloudsmith whoami    
-
-      - name: Download artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: python-package
-          path: dist
-          repository: ${{ github.repository }}
-          github-token: ${{ github.token }}
-          run-id: ${{ github.event.workflow_run.id }}
 
       - name: List directory contents
         run: ls -la dist/
