@@ -53,7 +53,7 @@ jobs:
           
           echo "Found package identifier: $IDENTIFIER"
           
-          # Promote package using the identifier
+          # Promote package using the identifier yeah
           echo "$IDENTIFIER"
           cloudsmith mv --yes --verbose ${{ vars.CLOUDSMITH_NAMESPACE }}/${{ env.CLOUDSMITH_STAGING_REPO }}/$IDENTIFIER ${{ env.CLOUDSMITH_PRODUCTION_REPO }}
         shell: bash
