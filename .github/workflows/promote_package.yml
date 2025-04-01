@@ -41,7 +41,7 @@ jobs:
       - name: Tag package as ready-for-production
         run: |
           echo "Tagging ${{ env.PACKAGE_NAME }} v${{ github.event.client_payload.package_version }}"
-          cloudsmith tags add ${{ env.CLOUDSMITH_NAMESPACE }}/${{ env.CLOUDSMITH_STAGING_REPO }}/${{ github.event.client_payload.package_name }} "ready-for-production"
+          cloudsmith tags add ${{ env.CLOUDSMITH_NAMESPACE }}/${{ env.CLOUDSMITH_STAGING_REPO }}/${{ env.PACKAGE_NAME }} "ready-for-production"
 
       - name: Get package identifier and promote
         run: |
