@@ -39,7 +39,7 @@ jobs:
       - name: Get OIDC token
         run: |
           value=$(curl -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=api://AzureADTokenExchange" | jq '.value')
-          token=$(curl -X POST -H "Content-Type: application/json" -d "{\"oidc_token\":$value, \"service_slug\":\"ekservice\"}" https://api.cloudsmith.io/openid/interview-aayush-jha/ | jq -r '.token')
+          token=$(curl -X POST -H "Content-Type: application/json" -d "{\"oidc_token\":$value, \"service_slug\":\"$CLOUDSMITH_SERVICE_SLUG\"}" https://api.cloudsmith.io/openid/$CLOUDSMITH_NAMESPACE/ | jq -r '.token')
           curl --request GET --url https://api.cloudsmith.io/v1/user/self/ --header "X-Api-Key:Bearer $token" --header 'accept: application/json'
                     
           echo "CLOUDSMITH_API_KEY=$token" >> $GITHUB_ENV
@@ -47,8 +47,8 @@ jobs:
       - name: Cloudsmith CLI Setup
         uses: cloudsmith-io/cloudsmith-cli-action@v1.0.3
         with: 
-          oidc-namespace: "${{ env.CLOUDSMITH_NAMESPACE }}"
-          oidc-service-slug: "${{ env.CLOUDSMITH_SERVICE_SLUG }}"
+          oidc-namespace: "$CLOUDSMITH_NAMESPACE"
+          oidc-service-slug: "$CLOUDSMITH_SERVICE_SLUG"
 
       - name: Checking the user details
         run: |
