@@ -9,7 +9,7 @@ on:
   #       type: string
   repository_dispatch:
     types:
-      - webhook
+      - promote_package
 
 
 env:
