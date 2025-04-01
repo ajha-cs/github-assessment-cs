@@ -40,11 +40,10 @@ jobs:
           echo "CLOUDSMITH_API_KEY=$token" >> $GITHUB_ENV
 
       - name: Cloudsmith CLI Setup
-        uses: cloudsmith-io/cloudsmith-cli-action@v1.0.0
+        uses: cloudsmith-io/cloudsmith-cli-action@v1.0.3
         with: 
-          api-key: ${{ secrets.CLOUDSMITH_API_KEY }}
-          oidc-namespace: "${{ secrets.CLOUDSMITH_ORG }}"
-          oidc-service-slug: "${{ secrets.CLOUDSMITH_SERVICE_SLUG }}"
+          oidc-namespace: "${{ env.CLOUDSMITH_NAMESPACE }}"
+          oidc-service-slug: "${{ env.CLOUDSMITH_SERVICE_SLUG }}"
 
       - name: Checking the user details
         run: |
