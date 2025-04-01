@@ -24,8 +24,9 @@ jobs:
 
     steps:
       - name: Install Cloudsmith CLI
-        uses: cloudsmith-io/cloudsmith-cli-action@v1.0.1
+        uses: cloudsmith-io/cloudsmith-cli-action@v1.0.3
         with:
+          api-key: ${{ env.CLOUDSMITH_API_KEY }}
           oidc-namespace: ${{ env.CLOUDSMITH_NAMESPACE }}
           oidc-service-slug: ${{ env.CLOUDSMITH_SERVICE_SLUG }}
 
@@ -41,7 +42,7 @@ jobs:
           
           PACKAGE_DATA=$(cloudsmith list packages ${{ vars.CLOUDSMITH_NAMESPACE }}/${{ env.CLOUDSMITH_STAGING_REPO }} -q "$PACKAGE_QUERY" -F json)
           echo "$PACKAGE_DATA"
-          
+
           # Extract the identifier_perm using jq
           IDENTIFIER=$(echo "$PACKAGE_DATA" | jq -r '.data[0].identifier_perm')
           
