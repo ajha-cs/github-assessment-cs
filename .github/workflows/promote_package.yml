@@ -47,7 +47,7 @@ jobs:
       - name: Get package identifier and promote
         run: |
           # Query for the package and get its identifier
-          PACKAGE_QUERY="tag:ready-for-production"
+          PACKAGE_QUERY="tag:${{ env.TAGS_UPDATE }}"
           echo "Searching for package with query: $PACKAGE_QUERY"
           
           PACKAGE_DATA=$(cloudsmith list packages ${{ vars.CLOUDSMITH_NAMESPACE }}/${{ env.CLOUDSMITH_STAGING_REPO }} -q "$PACKAGE_QUERY" -F json)
@@ -59,8 +59,6 @@ jobs:
             exit 0
           fi
           
-          echo "Package count with "${{ env.TAGS_UPDATE }}" tag:$PACKAGE_COUNT"
-
           echo "$PACKAGE_DATA" | jq -r '.data[] | .identifier_perm' | while read -r IDENTIFIER; do
             echo "Found package identifier: $IDENTIFIER"
             cloudsmith mv --yes --verbose \
