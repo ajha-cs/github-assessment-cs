@@ -2,8 +2,8 @@
 
 - name attribute missing in .toml file
 - version field was missing in .toml file
-- required the build file, assigned the path of build file
-- required the wheel target, assigned the path
+- required the build file and wheel target, assigned the path of build file and wheel target.
+- in release_package.yml, cloudsmith setup was missing.
 - in release_package.yml, write access is not allowed -> given the write access
 - Production and Staging repo mentioned wrong repo name
 
