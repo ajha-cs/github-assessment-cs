@@ -1,7 +1,7 @@
 **ISSUES Found**
 
-- name attribute missing in toml file
-- version field was missing in toml file
+- name attribute missing in .toml file
+- version field was missing in .toml file
 - required the build file, assigned the path of build file
 - required the wheel target, assigned the path
 - in release_package.yml, write access is not allowed -> given the write access
