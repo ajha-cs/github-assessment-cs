@@ -14,10 +14,11 @@ on:
 
 env:
   CLOUDSMITH_NAMESPACE: ${{ vars.CLOUDSMITH_NAMESPACE }}
-  CLOUDSMITH_STAGING_REPO: 'staging'
-  CLOUDSMITH_PRODUCTION_REPO: 'production'
+  CLOUDSMITH_STAGING_REPO: ${{ vars.CLOUDSMITH_STAGING_REPO }}
+  CLOUDSMITH_PRODUCTION_REPO: ${{ vars.CLOUDSMITH_PRODUCTION_REPO }}
   CLOUDSMITH_SERVICE_SLUG: ${{ vars.CLOUDSMITH_SERVICE_SLUG }}
   PACKAGE_NAME: ${{ github.event.client_payload.package_slug }}
+  TAGS_UPDATE: "ready-for-production"
 
 permissions:
   id-token: write
@@ -41,7 +42,7 @@ jobs:
       - name: Tag package as ready-for-production
         run: |
           echo "Tagging ${{ env.PACKAGE_NAME }} - ${{ github.event.client_payload.package_version }}"
-          cloudsmith tags add ${{ env.CLOUDSMITH_NAMESPACE }}/${{ env.CLOUDSMITH_STAGING_REPO }}/${{ env.PACKAGE_NAME }} "ready-for-production"
+          cloudsmith tags add ${{ env.CLOUDSMITH_NAMESPACE }}/${{ env.CLOUDSMITH_STAGING_REPO }}/${{ env.PACKAGE_NAME }} "${{ env.TAGS_UPDATE }}"
 
       - name: Get package identifier and promote
         run: |
