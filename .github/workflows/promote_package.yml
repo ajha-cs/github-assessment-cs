@@ -39,7 +39,7 @@ jobs:
         run: |
           cloudsmith whoami 
       
-      - name: Tag package as ready-for-production
+      - name: Tag package as "${{ env.TAGS_UPDATE }}"
         run: |
           echo "Tagging ${{ env.PACKAGE_NAME }} - ${{ github.event.client_payload.package_version }}"
           cloudsmith tags add ${{ env.CLOUDSMITH_NAMESPACE }}/${{ env.CLOUDSMITH_STAGING_REPO }}/${{ env.PACKAGE_NAME }} "${{ env.TAGS_UPDATE }}"
@@ -55,11 +55,11 @@ jobs:
 
           PACKAGE_COUNT=$(echo "$PACKAGE_DATA" | jq '.data | length')
           if [ "$PACKAGE_COUNT" -eq 0 ]; then
-            echo "No packages found with tag 'ready-for-production'"
+            echo "No packages found with tag: "${{ env.TAGS_UPDATE }}""
             exit 0
           fi
           
-          echo "Package count with ready-for-production tag:$PACKAGE_COUNT"
+          echo "Package count with "${{ env.TAGS_UPDATE }}" tag:$PACKAGE_COUNT"
 
           echo "$PACKAGE_DATA" | jq -r '.data[] | .identifier_perm' | while read -r IDENTIFIER; do
             echo "Found package identifier: $IDENTIFIER"
