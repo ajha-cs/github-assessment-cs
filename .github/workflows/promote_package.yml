@@ -57,6 +57,8 @@ jobs:
             echo "No packages found with tag 'ready-for-production'"
             exit 0
           fi
+          
+          echo "Package count with ready-for-production tag:$PACKAGE_COUNT"
 
           echo "$PACKAGE_DATA" | jq -r '.data[] | .identifier_perm' | while read -r IDENTIFIER; do
             echo "Found package identifier: $IDENTIFIER"
