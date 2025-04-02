@@ -42,7 +42,7 @@ jobs:
       - name: Tag package as "${{ env.TAGS_UPDATE }}"
         run: |
           echo "Tagging ${{ env.PACKAGE_NAME }} - ${{ github.event.client_payload.package_version }}"
-          cloudsmith tags add ${{ env.CLOUDSMITH_NAMESPACE }}/${{ env.CLOUDSMITH_STAGING_REPO }}/${{ env.PACKAGE_NAME }} "${{ env.TAGS_UPDATE }}" "via-pipeline"
+          cloudsmith tags add ${{ env.CLOUDSMITH_NAMESPACE }}/${{ env.CLOUDSMITH_STAGING_REPO }}/${{ env.PACKAGE_NAME }} "${{ env.TAGS_UPDATE }}" via-pipeline
 
       - name: Get package identifier and promote
         run: |
