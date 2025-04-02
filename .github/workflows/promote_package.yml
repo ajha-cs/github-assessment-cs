@@ -59,6 +59,8 @@ jobs:
             exit 0
           fi
           
+          echo "PACKAGE COUNT:$PACKAGE_COUNT"
+
           echo "$PACKAGE_DATA" | jq -r '.data[] | .identifier_perm' | while read -r IDENTIFIER; do
             echo "Found package identifier: $IDENTIFIER"
             cloudsmith mv --yes --verbose \
